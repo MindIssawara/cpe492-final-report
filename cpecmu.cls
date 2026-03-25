@@ -471,6 +471,7 @@
 }
 \newenvironment{abstractTH}{\@abstract@begin{TH}{บทคัดย่อ}}{\cleardoublepage}
 \renewenvironment{abstract}{\@abstract@begin{EN}{Abstract}}{\cleardoublepage}
+\newenvironment{mypara}{\par\setlength{\parindent}{1em}\indent}{}
 \newenvironment{dedication}{%
   \phantomsection
   \prelim@contents{Dedication}

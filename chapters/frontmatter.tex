@@ -3,23 +3,27 @@
 
 \ifproject
 \begin{abstractTH}
-เขียนบทคัดย่อของโครงงานที่นี่
-
-การเขียนรายงานเป็นส่วนหนึ่งของการทำโครงงานวิศวกรรมคอมพิวเตอร์
-เพื่อทบทวนทฤษฎีที่เกี่ยวข้อง อธิบายขั้นตอนวิธีแก้ปัญหาเชิงวิศวกรรม และวิเคราะห์และสรุปผลการทดลองอุปกรณ์และระบบต่างๆ
-\enskip อย่างไรก็ดี การสร้างรูปเล่มรายงานให้ถูกรูปแบบนั้นเป็นขั้นตอนที่ยุ่งยาก
-แม้ว่าจะมีต้นแบบสำหรับใช้ในโปรแกรม Microsoft Word แล้วก็ตาม
-แต่นักศึกษาส่วนใหญ่ยังคงค้นพบว่าการใช้งานมีความซับซ้อน และเกิดความผิดพลาดในการจัดรูปแบบ กำหนดเลขหัวข้อ และสร้างสารบัญอยู่
-\enskip ภาควิชาวิศวกรรมคอมพิวเตอร์จึงได้จัดทำต้นแบบรูปเล่มรายงานโดยใช้ระบบจัดเตรียมเอกสาร
-\LaTeX{} เพื่อช่วยให้นักศึกษาเขียนรายงานได้อย่างสะดวกและรวดเร็วมากยิ่งขึ้น
+\begin{mypara}
+    \indent การวางแผนเส้นทางและตารางเดินรถขนส่งสาธารณะเป็นกระบวนการที่มีความซับซ้อนสูง เนื่องจากต้องบริหารจัดการโครงข่ายที่หลากหลาย ความหนาแน่นของประชากร และจุดเชื่อมต่อที่ต้องมีความต่อเนื่อง โครงการนี้จึงนำเสนอการพัฒนา เว็บแอปพลิเคชันสำหรับการจำลองสถานการณ์ (Web-based Simulation) เพื่อใช้เป็นเครื่องมือประเมินและทดสอบแผนการเดินรถก่อนการปฏิบัติงานจริง ช่วยลดความเสี่ยงและเพิ่มประสิทธิภาพในการตัดสินใจภายใต้สภาวะจำลองที่ควบคุมได้
+\end{mypara}
+\begin{mypara}
+    \indent ระบบประมวลผลด้วย เทคนิคการจำลองแบบเหตุการณ์ไม่ต่อเนื่อง (Discrete-event Simulation) ร่วมกับ เทคนิคการจำลองแบบสุ่มเชิงสถิติ (Stochastic Simulation) เพื่อสะท้อนพฤติกรรมที่เกิดขึ้นจริงในระบบขนส่ง โดยผู้ใช้สามารถนำเข้าข้อมูลได้ 2 ส่วน คือ 1) ข้อมูลสถานการณ์ (Scenario Data) สำหรับปรับเปลี่ยนพารามิเตอร์รายครั้ง เช่น เส้นทาง ตารางเวลา และคุณสมบัติเฉพาะของรถ และ 2) ข้อมูลการกำหนดค่า (Configuration Data) ซึ่งเป็นข้อมูลพื้นฐานเชิงโครงสร้างในรูปแบบ Network Model รวมถึงสถิติระยะห่างเวลาการมาถึงสถานีและจำนวนผู้โดยสาร
+\end{mypara}
+\begin{mypara}
+    \indent ผลการทดสอบด้านประสบการณ์ผู้ใช้ (User Experience) พบว่าระบบมีความซับซ้อนในระดับที่ผู้ใช้ต้องใช้เวลาเรียนรู้ก่อนการใช้งานจริง ในขณะที่ผลการวิเคราะห์เชิงสถิติพบว่า ขนาดของกลุ่มตัวอย่าง (Sample Size) ในข้อมูลนำเข้าส่งผลโดยตรงต่อ ความแม่นยำ (Accuracy) และ ความเที่ยงตรง (Precision) ของระบบอย่างมีนัยสำคัญ ดังนั้น การเตรียมข้อมูลนำเข้าในปริมาณที่เหมาะสมและสอดคล้องกับสถิติเชิงสุ่มจึงเป็นปัจจัยสำคัญในการเพิ่มความน่าเชื่อถือให้แก่ผลการจำลองเพื่อการวางแผนระบบขนส่งสาธารณะที่ยืดหยุ่นและมีประสิทธิภาพ
+\end{mypara}
 \end{abstractTH}
 
 \begin{abstract}
-The abstract would be placed here. It usually does not exceed 350 words
-long (not counting the heading), and must not take up more than one (1) page
-(even if fewer than 350 words long).
-
-Make sure your abstract sits inside the \texttt{abstract} environment.
+\begin{mypara}
+    \indent Public transport route and schedule planning is a highly complex process, requiring the management of diverse networks, population densities, and the necessity for seamless connectivity. This project proposes the development of a Web-based Simulation Application as a tool for evaluating and testing transit plans prior to real-world implementation. This approach reduces operational risks and enhances decision-making efficiency within a controlled, simulated environment.
+\end{mypara}
+\begin{mypara}
+    \indent The system processes data using Discrete-Event Simulation (DES) combined with Stochastic Simulation techniques to accurately reflect real-world transit behaviors. Users can input data in two primary categories: 1) Scenario Data, which allows for frequent parameter adjustments such as service routes, dispatch schedules, and vehicle specifications; and 2) Configuration Data, representing the foundational structural information in a Network Model format, including interarrival time statistics and alighting data.
+\end{mypara}
+\begin{mypara}
+    \indent Evaluation of the User Experience (UX) revealed that the system possesses a level of complexity that requires a learning period before proficient use. Regarding statistical performance, results indicate that the Sample Size of the input data significantly impacts the system’s Accuracy and Precision. Consequently, providing an adequate and statistically consistent sample size is a critical factor in increasing the reliability of simulation outcomes, ultimately leading to more flexible and efficient public transportation planning.
+\end{mypara}
 \end{abstract}
 
 \iffalse
