@@ -110,7 +110,11 @@
 
 \begin{biosketch}
 \begin{center}
-  \includegraphics[width=1.5in]{mugshot.jpg}
+  \IfFileExists{mugshot.jpg}{%
+    \includegraphics[width=1.5in]{mugshot.jpg}%
+  }{%
+    \fbox{\parbox[c][1.8in][c]{1.5in}{\centering Mugshot\\missing}}
+  }
 \end{center}
 Your biosketch goes here. Make sure it sits inside
 the \texttt{biosketch} environment.
