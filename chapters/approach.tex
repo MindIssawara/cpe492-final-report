@@ -44,7 +44,7 @@
   \indent เป็นส่วนของข้อมูลที่ใช้เป็นพื้นฐานในการจำลองซึ่งจะไม่ค่อยมีการเปลี่ยนแปลงบ่อย 
   ได้แก่ ข้อมูลช่วงระยะห่างของเวลาที่ผู้โดยสารแต่ละคนมาถึงที่สถานี ข้อมูลของจำนวนผู้โดยสารที่ลงจากรถในแต่ละสถานี 
   และข้อมูลที่เกี่ยวข้องกับสถานีซึ่งจะเก็บในรูปแบบของ network model ซึ่งจะมี 
-  node เป็นรายชื่อสถานี และ มี edge เป็นระยะทางละหว่างแต่ละสถานี
+  node เป็นรายชื่อสถานี และ มี edge เป็นระยะทางระหว่างแต่ละสถานี
   \end{mypara}
 \subsection{ส่วนการจำลอง (Simulation Component)}
 \begin{mypara}
@@ -61,13 +61,76 @@
 \end{mypara}
 \section{ขั้นตอนการทำงานของระบบ (System Workflow)}
 \begin{mypara}
-    \indent โครงงานนี้ทำงานโดยนำข้อมูลสถานการณ์จากผู้ใช้ (Scenario data) มาจำลองระบบขนส่งสาธารณะ 
+    \indent โครงงานนี้ทำงานโดยนำข้อมูลสถานการณ์จากผู้ใช้ (scenario data) มาจำลองระบบขนส่งสาธารณะ 
     โดยอ้างอิงจากข้อมูลการกำหนดค่า (configuration data) ซึ่งประกอบด้วยข้อมูลหลายประเภท 
-    โดยบางส่วนจะถูกนำไปสร้างเป็น ฟังก์ชันการแจกแจง (Distribution Function) เพื่อใช้ในการสุ่มพฤติกรรมของผู้โดยสาร 
+    โดยบางส่วนจะถูกนำไปสร้างเป็น ฟังก์ชันการแจกแจง (distribution function) เพื่อใช้ในการสุ่มพฤติกรรมของผู้โดยสาร 
     ขณะที่ข้อมูลอีกส่วนจะถูกนำมาใช้โดยตรง ใน ส่วนการจำลอง ซึ่งจะประมวลผลด้วย
     เทคนิคการจำลองแบบเหตุการณ์ไม่ต่อเนื่อง (discrete-event simulation) และเทคนิคการจำลองแบบสุ่มเชิงสถิติ (stochastic simulation) 
     เพื่อสร้างผลลัพธ์เชิงสถิติที่สะท้อนประสิทธิภาพของระบบขนส่งสาธารณะมาแสดงผลในส่วน output
 \end{mypara}
+\subsection{การทำงานของข้อมูลการกำหนดค่าในระบบ (Configuration flow)}
+\begin{mypara}
+  \indent ข้อมูลการกำหนดค่า (configuration data) ประกอบด้วยข้อมูลที่รับมาจากผู้ใช้ทั้งหมด 3 ประเภท ได้แก่ ข้อมูลขอบเขตพื้นที่ที่จะทำการจำลอง (map area configuration) 
+    ข้อมูลช่วงระยะห่างของเวลาที่ผู้โดยสารแต่ละคนมาถึงที่สถานี (interarrival data) และข้อมูลของจำนวนผู้โดยสารที่ลงจากรถในแต่ละสถานี (alighting data) โดยทั้งหมดจะผ่านกระบวนการดังนี้
+\begin{itemize}
+    \item ข้อมูลขอบเขตพื้นที่ที่จะทำการจำลอง (map area configuration) ส่วนนี้จะรับข้อมูลได้ 2 รูปแบบคือ รหัสพื้นที่ (area code) หรือ พิกัดของพื้นที่ (geographical coordinates) โดยจะนำมาเป็นคำหลัก (keyword) ในการค้นหาข้อมูลในฐานข้อมูล Openstreetmap ซึ่งจะถูกนำมาใช้ในการสร้าง network model ซึ่งจะมี node เป็นรายชื่อสถานี และ มี edge เป็นระยะทางระหว่างแต่ละสถานี
+    \item ข้อมูลช่วงระยะห่างของเวลาที่ผู้โดยสารแต่ละคนมาถึงที่สถานี (interarrival data) และข้อมูลของจำนวนผู้โดยสารที่ลงจากรถในแต่ละสถานี (alighting data) จะนำเข้าสู่ระบบในรูปแบบไฟล์สกุล .xlsx ซึ่งระบบจะทำการอ่านข้อมูลจากไฟล์
+    และจะถูกนำมาใช้ในการสร้างฟังก์ชันการแจกแจง (distribution function) 
+\end{itemize}
+  \indent หลังจากข้อมูลแต่ละส่วนผ่านกระบวนการข้างต้นแล้ว ทั้งหมดจะถูกรวมกันเป็นข้อมูลการกำหนดค่า (configuration data) ดังในภาพ \ref{fig:configuration_flow} 
+\end{mypara}
+
+\begin{figure}[H]
+    \centering
+  \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{configuration_flow.png}
+    \caption{การทำงานของข้อมูลการกำหนดค่าในระบบ }
+    \label{fig:configuration_flow}
+\end{figure}
+
+\subsection{การทำงานของข้อมูลสถานการณ์จากผู้ใช้ (Scenario flow)}
+\begin{mypara}
+  \indent ข้อมูลสถานการณ์ (scenario data) ประกอบด้วย 3 ส่วนซึ่งเป็นข้อมูลที่ผู้ใช้สามารถปรับเปลี่ยนพารามิเตอร์ได้บ่อย ๆ เพื่อจำลองสถานการณ์ต่าง ๆ ดังนี้ 
+\begin{itemize}
+  \item เส้นทางการให้บริการของรถในแต่ละสายบริการ (Route) โดยจะเก็บเป็นลำดับของสถานีที่รถจะวิ่งผ่านในแต่ละสายบริการซึ่งจะอ้างอิง Network model ที่สร้างจากข้อมูลขอบเขตพื้นที่ที่จะทำการจำลอง (map area configuration) ในส่วนของข้อมูลการกำหนดค่า (configuration data)
+  \item ตารางเวลาการออกรถ (bus schedule) ส่วนนี้จะนำเข้าข้อมูลในรูปแบบไฟล์สกุล .xlsx ซึ่งจะมีข้อมูลเวลาการออกรถของแต่ละสายบริการ โดยจะนำมาใช้ในการกำหนดเวลาที่รถจะออกจากสถานีต้นทางในแต่ละรอบการเดินรถ
+  \item ข้อมูลของรถซึ่งมี ความจุผู้โดยสารระยะทางที่สามารถวิ่งได้สูงสุด ความเร็วในการวิ่ง (bus information) การกำหนดข้อมูลของรถแต่แยกตามสายบริการจะช่วยให้สามารถจำลองสถานการณ์ที่มีความหลากหลายของรถในแต่ละสายบริการได้อย่างเหมาะสม
+\end{itemize}
+โดยหลังจากข้อมูลแต่ละส่วนผ่านกระบวนการข้างต้นแล้ว ทั้งหมดจะถูกรวมกันเป็นข้อมูลสถานการณ์ (scenario data) นำไปรวมกับข้อมูลการกำหนดค่า (configuration data) ช่วงเวลาการจำลอง (time period) และ ช่วงเวลาย่อย (time slot) จากนั้นข้อมูลจะถูกประมวลผลผ่านแบบจำลอง ดังในภาพ \ref{fig:scenario_flow}
+\end{mypara}
+
+\begin{figure}[H]
+    \centering
+  \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{scenario_flow.png}
+    \caption{การทำงานของข้อมูลสถานการณ์จากผู้ใช้ }
+    \label{fig:scenario_flow}
+\end{figure}
+
+\subsection{ส่วนประมวลผลการจำลอง (Simulation engine)}
+\begin{mypara}
+  \indent ส่วนประมวลผลการจำลอง (simulation engine) มีส่วนประกอบหลักดังนี้
+\begin{itemize}
+  \item Helper functions ได้แก่ Mapper เป็นส่วนที่ทำหน้าที่เปลี่ยน JSON ให้เป็นตัวแปรที่ใช้คำนวณใน Python และ Timer เป็นตัวช่วยในเวลาในระบบจำลองมีค่าสอดคล้องกับเวลาการจำลองที่ผู้ใช้กำหนดไว้
+  \item Simulator เป็นส่วนที่ทำหน้าที่ในการจำลองระบบขนส่งสาธารณะตามข้อมูลที่ได้รับจากส่วน scenario data และ configuration data ซึ่งจะใช้เทคนิคการจำลองแบบเหตุการณ์ไม่ต่อเนื่อง (discrete-event simulation) 
+  และเทคนิคการจำลองแบบสุ่มเชิงสถิติ (stochastic simulation) ในการจำลองระบบขนส่งสาธารณะ ส่วนนี้จะมีองค์ประกอบย่อย 4 ส่วน ได้แก่ Bus Station Passenger และ Arrival Generator
+  \item Output Generator เป็นส่วนที่ทำหน้าที่ในการสร้างผลลัพธ์เชิงสถิติที่สะท้อนประสิทธิภาพของระบบขนส่งสาธารณะมาแสดงผลในส่วน output โดยจะมีองค์ประกอบย่อย 2 ส่วน ได้แก่ Monitor และ Logger
+\end{itemize}
+  \indent ซึ่งแต่ละส่วนจะทำงานผสานในรูปแบบที่แสดงในภาพ \ref{fig:simulation_engine} และในส่วนนี้สัมพันธ์กับข้อมูลสถานการณ์ (scenario data) และข้อมูลการกำหนดค่า (configuration data) ดังในภาพ \ref{fig:simulation_overview} โดยข้อมูลสถานการณ์และข้อมูลการกำหนดค่าจะถูกนำไปใช้ในส่วนของ Simulator เพื่อจำลองระบบขนส่งสาธารณะ และผลลัพธ์ที่ได้จากการจำลองจะถูกส่งไปยัง Output Generator เพื่อสร้างผลลัพธ์เชิงสถิติที่สะท้อนประสิทธิภาพของระบบขนส่งสาธารณะมาแสดงผลในส่วน output
+\end{mypara}
+
+\begin{figure}[H]
+    \centering
+  \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{simulation_engine.png}
+    \caption{การทำงานของส่วนประมวลผลการจำลอง }
+    \label{fig:simulation_engine}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+  \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{simulation_overview.png}
+    \caption{ภาพรวมของการทำงานของส่วนประมวลผลการจำลอง }
+    \label{fig:simulation_overview}
+\end{figure}
+
 
 \section{ส่วนติดต่อผู้ใช้ (User Interface)}
 \begin{mypara}
