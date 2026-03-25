@@ -209,163 +209,124 @@
     \indent โครงงานนี้ได้พัฒนาส่วนติดต่อผู้ใช้งาน (User Interface) ของระบบในหน้าต่างๆ 
     เพื่อรองรับการใช้งานจริง โดยมีรายละเอียดการทำงานของแต่ละหน้าจอดังนี้
 
-\subsection{โครงร่างหน้าจอผู้ใช้ที่ไม่ได้ลงทะเบียน (Guest Users / Unregistered Users)}
+\subsection{หน้าจอของผู้ใช้ที่ไม่ได้ลงทะเบียน (Guest Users / Unregistered Users)}
 \begin{itemize}
     \item Step 1: ผู้ใช้จะเข้าสู่หน้า Landing page เพื่อเลือกระหว่างจะเข้าใช้ในโหมด Guest user หรือ Login user 
-    ตามภาพ \ref{fig:WireframeHomepage}
+    ตามภาพ \ref{fig:Landpage}
       \begin{figure}[H]
         \centering
         \includegraphics[scale=0.35]
-        {homepage.png}
-        \caption{Wireframe ของหน้า Landing page}
-        \label{fig:WireframeHomepage}
+        {3-5Pic/homepage_guest.png}
+        \caption{หน้า Landing page}
+        \label{fig:Landpage}
       \end{figure}
-
-    \item Step 2: Guest user สามารถเลือกว่าจะใช้ข้อมูลที่มีอยู่ใน Community หรือเลือกที่จะ Setup ข้อมูลทั้งหมดเอง
-    ตามภาพ \ref{fig:WireframeGuestDecision}
+    
+    \item Step 2: หากเลือก Guest user จะต้อง Setup ข้อมูลทั้งหมดเอง
+    ตามภาพ \ref{fig:SetupConfigMapGuest} และ \ref{fig:SetupConfigDataGuest}
       \begin{figure}[H]
         \centering
-        \includegraphics[scale=0.35]
-        {guest_login.png}
-        \caption{Wireframe ของหน้า Guest Decision}
-        \label{fig:WireframeGuestDecision}
+        \includegraphics[scale=0.3]
+        {3-5Pic/SetupConfigGuest.png}
+        \caption{หน้า Setup Map area สำหรับ Guest}
+        \label{fig:SetupConfigMapGuest}
+      \end{figure}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.3]
+        {3-5Pic/SetupConfigDataGuest.png}
+        \caption{หน้า Setup Configuration data สำหรับ Guest}
+        \label{fig:SetupConfigDataGuest}
       \end{figure}
 
-    \item Step 3: การใช้ข้อมูล Configuration data แบ่งเป็น 2 กรณี ดังนี้
-    \begin{itemize}
-        \item กรณีที่เลือกใช้จากข้อมูลที่มีอยู่ใน Community 
-        ตามภาพ \ref{fig:WireframeCommunityConfigGuest} และ \ref{fig:WireframeCommunityConfigDetailGuest}
-          \begin{figure}[H]
-            \centering
-            \includegraphics[scale=0.4]{conf_commu_guest.png}
-            \caption{Wireframe ของหน้า Community Configuration data}
-            \label{fig:WireframeCommunityConfigGuest}
-          \end{figure}
-
-          \begin{figure}[H]
-            \centering
-            \includegraphics[scale=0.4]{conf_commu_detail_guest.png}
-            \caption{Wireframe ของหน้ารายละเอียด Configuration data ใน Community}
-            \label{fig:WireframeCommunityConfigDetailGuest}
-          \end{figure}
-
-        \newpage
-        \item กรณีที่ผู้ใช้เลือก Setup ข้อมูลทั้งหมดเอง จะเข้าสู่การ Setup Configuration ด้วยตนเอง
-        ตามภาพ \ref{fig:WireframeSetupConfigGuest}
-          \begin{figure}[H]
-            \centering
-            \includegraphics[scale=0.4]{conf_setup_guest.png}
-            \caption{Wireframe ของหน้า Setup Configuration data สำหรับ Guest}
-            \label{fig:WireframeSetupConfigGuest}
-          \end{figure}
-    \end{itemize}
-
-    \item Step 4: หลังจาก Setup Configuration data ทั้งหมดเรียบร้อยจะเข้าสู่หน้า Input Scenario page 
+    \item Step 3: หลังจาก Setup Configuration data ทั้งหมดเรียบร้อยจะเข้าสู่หน้า Input Scenario page 
     เพื่อกรอกข้อมูลสำหรับการจำลองบน Scenario ต่างๆ ตามภาพ \ref{fig:WireframeInputGuest} และ \ref{fig:WireframeInputRouteGuest}
       \begin{figure}[H]
         \centering
-        \includegraphics[scale=0.4]{input_bus.png}
-        \caption{Wireframe ของหน้า Input Scenario page (bus) }
+        \includegraphics[scale=0.275]{3-5Pic/ScenarioBusGuest.png}
+        \caption{หน้า Input Scenario page (bus) }
         \label{fig:WireframeInputGuest}
       \end{figure}
       \begin{figure}[H]
         \centering
-        \includegraphics[scale=0.4]{input_route.png}
-        \caption{Wireframe ของหน้า Input Scenario page (route) }
+        \includegraphics[scale=0.275]{3-5Pic/ScenarioRouteGuest.png}
+        \caption{หน้า Input Scenario page (route) }
         \label{fig:WireframeInputRouteGuest}
       \end{figure}
 
-    \item Step 5: หลังจากผู้ใช้กดปุ่ม Run simulation แล้ว User จะสามารถเลือกดู  Dashboard สรุปผลข้อมูล 
+    \item Step 4: หลังจากผู้ใช้กดปุ่ม Run simulation แล้ว User จะสามารถเลือกดู Dashboard สรุปผลข้อมูล 
     หรือ Interacting Visualize ตามภาพ \ref{fig:WireframeOutputGuest} และ \ref{fig:WireframeDashboardGuest}
       \begin{figure}[H]
         \centering
-        \includegraphics[scale=0.4]{output_show.png}
-        \caption{Wireframe ของหน้าแสดงผลลัพธ์หลังจาก Run Simulation}
+        \includegraphics[scale=0.3]{3-5Pic/Interactive_MapGuest.png}
+        \caption{หน้าแสดงผลลัพธ์หลังจาก Run Simulation}
         \label{fig:WireframeOutputGuest}
       \end{figure} 
 
       \begin{figure}[H]
         \centering
-        \includegraphics[scale=0.4]{dashboard.png}
-        \caption{Wireframe ของหน้า Dashboard }
+        \includegraphics[scale=0.3]{3-5Pic/Dashboard_Guest.png}
+        \caption{หน้า Dashboard }
         \label{fig:WireframeDashboardGuest}
       \end{figure}
     
+      \item Step 5: ผู้ใช้สามารถกด Export PDF เพื่อดูและบันทึกข้อมูลที่จำลองออกมาแบบละเอียดได้ 
+      ตามภาพ \ref{fig:ExportPDFGuest}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.275]{3-5Pic/pdfGuest.png}
+        \caption{หน้า Export PDF}
+        \label{fig:ExportPDFGuest}
+      \end{figure}
+
 \end{itemize} 
 
 
-\subsection{โครงร่างหน้าจอของผู้ใช้ที่ลงทะเบียน (Registered Users)}
+\subsection{หน้าจอของผู้ใช้ที่ลงทะเบียน (Registered Users)}
 \begin{itemize}
     \item Step 1:  ผู้ใช้จะเข้าสู่หน้า Landing page เพื่อเลือกระหว่างจะเข้าใช้ในโหมด Guest user หรือ Login user
     ตามภาพ \ref{fig:WireframeHomepageLogin}
     \begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]
-    {homepage.png}
-    \caption{Wireframe ของหน้า Landing page}
+    {3-5Pic/homepage_guest.png}
+    \caption{หน้า Landing page}
     \label{fig:WireframeHomepageLogin}
     \end{figure}
 
-    \newpage
-    \item Step 2: หลังจากเข้าสู่ระบบผู้ใช้จะเข้าสู่หน้า My work ซึ่งเป็นการจัดการงานทั้งหมดของผู้ใช้
-    ตามภาพ \ref{fig:WireframeMyWork} และ \ref{fig:WireframeMyWorkPublish}
-    \begin{itemize}
-      \item ในหน้า My work ผู้ใช้สามารถเลือกใช้งานหรือ Publish งาน
-        \begin{figure}[H]
-          \centering
-          \includegraphics[scale=0.4]{my_work.png} 
-          \caption{Wireframe ของหน้า My work}
-          \label{fig:WireframeMyWork}
-        \end{figure}
-
-        \begin{figure}[H]
-          \centering
-          \includegraphics[scale=0.6]{my_work_publish.png} 
-          \caption{Wireframe ของหน้า My work ในกรณีที่ Publish งาน}
-          \label{fig:WireframeMyWorkPublish}
-        \end{figure}
+    \item Step 2: หลังจากเข้าสู่ระบบผู้ใช้จะเข้าสู่หน้า My Project ซึ่งเป็นการจัดการงานทั้งหมดของผู้ใช้
+    ตามภาพ \ref{fig:WireframeMyWork}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.3]
+        {3-5Pic/MyProject.png} 
+        \caption{หน้า My Project}
+        \label{fig:WireframeMyWork}
+      \end{figure}
         
-      \newpage
-      \item  ผู้ใช้สามารถสร้าง Work ใหม่ได้ด้วยการกดที่ปุ่ม New work โดยการสร้าง Work จะต้องอ้างอิงกับ Configuration data ที่มีอยู่
+      \item  ผู้ใช้สามารถสร้าง Project ใหม่ได้ด้วยการกดที่ปุ่ม New Project โดยการสร้าง Project จะต้องอ้างอิงกับ Configuration data ที่มีอยู่
       ตามภาพ \ref{fig:WireframeNewWork}  
       \begin{figure}[H]
         \centering
-        \includegraphics[scale=0.4]{new_work.png}
-        \caption{Wireframe ของหน้า New work}
+        \includegraphics[scale=0.3]{3-5Pic/NewProject.png}
+        \caption{หน้า New Project}
         \label{fig:WireframeNewWork}
       \end{figure}
-    \end{itemize}
 
-    \item Step 3: การใช้ข้อมูล Configuration data แบ่งเป็น 2 กรณี ดังนี้
+    \item Step 3: การสร้างข้อมูล Configuration data ดังนี้
     \begin{itemize}
-        \item กรณีที่เลือกใช้จากข้อมูลที่มีอยู่ใน Community ตามภาพ \ref{fig:WireframeCommunityConfigLogin} และ \ref{fig:WireframeCommunityConfigDetailLogin}
-          \begin{figure}[H]
-            \centering
-            \includegraphics[scale=0.4]{conf_commu.png}
-            \caption{Wireframe ของหน้า Community Configuration data}
-            \label{fig:WireframeCommunityConfigLogin}
-          \end{figure}
-
-          \begin{figure}[H]
-            \centering
-            \includegraphics[scale=0.4]{conf_commu_detail_reg.png}
-            \caption{Wireframe ของหน้ารายละเอียด Configuration data ใน Community}
-            \label{fig:WireframeCommunityConfigDetailLogin}
-          \end{figure}
-
         \item ผู้ใช้สามารถสร้าง Configuration data ใหม่ได้ด้วยการกดที่ปุ่ม New Configuration และสามารถ Save Configuration 
         เพื่อใช้ในงานต่อไปได้ ตามภาพ \ref{fig:WireframeNewConfigLogin} และ \ref{fig:WireframeSetupConfigLogin}
           \begin{figure}[H]
             \centering
-            \includegraphics[scale=0.4]{new_conf.png}
-            \caption{Wireframe ของหน้า New Configuration data}
+            \includegraphics[scale=0.35]{3-5Pic/MapArea.png}
+            \caption{หน้า New Configuration data สำหรับผู้ใช้ที่ลงทะเบียน}
             \label{fig:WireframeNewConfigLogin}
           \end{figure}
 
           \begin{figure}[H]
             \centering
-            \includegraphics[scale=0.4]{conf_setup_reg.png}
-            \caption{Wireframe ของหน้า Setup Configuration data สำหรับผู้ใช้ที่ลงทะเบียน}
+            \includegraphics[scale=0.35]{3-5Pic/SetupConfigData.png}
+            \caption{หน้า Setup Configuration data สำหรับผู้ใช้ที่ลงทะเบียน}
             \label{fig:WireframeSetupConfigLogin}
           \end{figure}
 
@@ -375,15 +336,15 @@
     ตามภาพ \ref{fig:WireframeInputLogin} และ \ref{fig:WireframeInputRouteLogin}
       \begin{figure}[H]
         \centering 
-        \includegraphics[scale=0.4]{input_bus.png}
-        \caption{Wireframe ของหน้า Input Scenario page (bus) }
+        \includegraphics[scale=0.3]{3-5Pic/ScenarioBus.png}
+        \caption{หน้า Input Scenario page (bus) }
         \label{fig:WireframeInputLogin}
       \end{figure}
 
       \begin{figure}[H]
         \centering
-        \includegraphics[scale=0.4]{input_route.png}
-        \caption{Wireframe ของหน้า Input Scenario page (route) }
+        \includegraphics[scale=0.3]{3-5Pic/ScenarioRoute.png}
+        \caption{หน้า Input Scenario page (route) }
         \label{fig:WireframeInputRouteLogin}
       \end{figure}
 
@@ -391,19 +352,28 @@
     ตามภาพ \ref{fig:WireframeOutputLogin} และ \ref{fig:WireframeDashboardLogin}
       \begin{figure}[H]
         \centering
-        \includegraphics[scale=0.4]{output_show.png}
-        \caption{Wireframe ของหน้าแสดงผลลัพธ์หลังจาก Run simulation}
+        \includegraphics[scale=0.3]{3-5Pic/InteractiveMap.png}
+        \caption{หน้าแสดงผลลัพธ์หลังจาก Run simulation}
         \label{fig:WireframeOutputLogin}
       \end{figure}
 
       \begin{figure}[H]
         \centering
-        \includegraphics[scale=0.4]{dashboard.png}
-        \caption{Wireframe ของหน้า Dashboard }
+        \includegraphics[scale=0.3]{3-5Pic/Dashboard.png} 
+        \caption{หน้า Dashboard }
         \label{fig:WireframeDashboardLogin}
       \end{figure}
-    \end{itemize}
 
+      \item Step 6: ผู้ใช้สามารถกด Export PDF เพื่อดูและบันทึกข้อมูลที่จำลองออกมาแบบละเอียดได้ 
+      ตามภาพ \ref{fig:ExportPDFLogin}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.275]{3-5Pic/ExportPDFLOGIN.png}
+        \caption{หน้า Export PDF}
+        \label{fig:ExportPDFLogin}
+      \end{figure}
+
+    \end{itemize}
 \end{mypara}
 
 \section{รูปแบบไฟล์ข้อมูลนำเข้า (Supported Input File Formats)}
