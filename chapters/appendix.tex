@@ -170,12 +170,15 @@ SELECT PostGIS_Version();
 \end{mypara}
 
 \begin{verbatim}
-docker run --name dess-postgis -e POSTGRES_USER=DeSS_T -e POSTGRES_PASSWORD=CHANGE_ME -e POSTGRES_DB=dess_db -p 5432:5432 -d postgis/postgis:15-3.4
+docker run --name dess-postgis -e POSTGRES_USER=DeSS_T -e 
+POSTGRES_PASSWORD=CHANGE_ME -e POSTGRES_DB=dess_db -p 5432:5432 -d 
+postgis/postgis:15-3.4
 \end{verbatim}
 
 และตรวจสอบเวอร์ชัน PostGIS
 \begin{verbatim}
-docker exec -it dess-postgis psql -U DeSS_T -d dess_db -c "SELECT PostGIS_Version();"
+docker exec -it dess-postgis psql -U DeSS_T -d dess_db -c 
+"SELECT PostGIS_Version();"
 \end{verbatim}
 
 \section{การรันระบบด้วย Docker Compose (วิธีที่แนะนำ)}
