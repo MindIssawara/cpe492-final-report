@@ -251,6 +251,90 @@ go build -o .\bin\server.exe .
     \item Frontend สามารถเรียกใช้งาน API ของ backend ได้สำเร็จ
 \end{enumerate}
 
+\section{แนวทางการ deploy production บน VM}
+ก่อนเริ่มการติดตั้ง ให้ดำเนินการเตรียมสภาพแวดล้อมบน VM ดังนี้:
+\begin{itemize}
+    \item \textbf{ติดตั้งเครื่องมือหลัก:} ติดตั้ง Docker Engine และ Docker Compose plugin
+    \item \textbf{ตั้งค่า Firewall / Security Group:} เปิดพอร์ตที่จำเป็นสำหรับการสื่อสาร
+    \begin{itemize}
+        \item \texttt{80/443}: สำหรับ Reverse Proxy และการทำ SSL
+        \item \texttt{3000}: สำหรับการเข้าถึง Frontend โดยตรง (ถ้าจำเป็น)
+        \item \texttt{8080}: สำหรับ API Backend
+        \item \textit{หมายเหตุ:} ไม่ควรเปิดพอร์ต \texttt{5432} (PostgreSQL) เป็นสาธารณะ
+    \end{itemize}
+    \item \textbf{สร้างโฟลเดอร์โปรเจกต์:} เช่น \texttt{/opt/dess-t} สำหรับเก็บไฟล์ Config ทั้งหมด
+\end{itemize}
+
+\subsection{จัดวางไฟล์สำคัญในโฟลเดอร์โปรเจกต์ที่สร้างขึ้น}
+\begin{enumerate}
+    \item \texttt{docker-compose.yml}
+    \item \texttt{nginx.conf} (สำหรับการทำ mount เข้าไปยัง Frontend container)
+    \item \texttt{.env} สำหรับสภาวะ Production โดยต้องระบุค่าที่สำคัญ ดังนี้:
+\end{enumerate}
+
+\begin{verbatim}
+ORS_API_KEY=your_key_here
+GOOGLE_CLIENT_ID=your_id_here
+GOOGLE_CLIENT_SECRET=your_secret_here
+GOOGLE_REDIRECT_URI=https://<your-domain>/auth/callback
+DB_USER=admin
+DB_PASSWORD=your_secure_password
+DB_NAME=dess_t_db
+\end{verbatim}
+
+\subsection{เพื่อให้ระบบมีความปลอดภัยและเสถียร}
+ควรปรับแก้ไฟล์ \texttt{docker-compose.yml} ดังนี้:
+\begin{itemize}
+    \item \textbf{Restart Policy:} ใส่ \texttt{restart: unless-stopped} ให้กับทุก Service
+    \item \textbf{Port Binding:} 
+    \begin{itemize}
+        \item นำพอร์ต \texttt{5432:5432} ออก หรือ Bind เฉพาะ \texttt{127.0.0.1}
+        \item พิจารณานำพอร์ต \texttt{5000} และ \texttt{8080} ออกหากต้องการให้ผ่าน Nginx เพียงทางเดียว
+    \end{itemize}
+    \item \textbf{Image Tagging:} ใช้ Tag แบบระบุเวอร์ชันที่แน่นอน (Immutable tags) เช่น \texttt{8.1} หรือ \texttt{8.4} แทนการใช้ \texttt{latest}
+\end{itemize}
+
+\subsection{ดำเนินการดึง Image และเริ่มการทำงานด้วยคำสั่ง}
+\begin{verbatim}
+# เริ่มทำงานในโหมด Background
+docker compose up -d
+
+# ตรวจสอบสถานะและ Healthcheck
+docker compose ps
+
+# ดู Log เพื่อตรวจสอบความผิดปกติ
+docker compose logs -f
+\end{verbatim}
+
+\subsection{การจัดการฐานข้อมูลครั้งแรก}
+\begin{itemize}
+    \item ตรวจสอบจนมั่นใจว่า PostgreSQL อยู่ในสถานะ \texttt{healthy}
+    \item รันกระบวนการ Migration หรือ Seed ข้อมูล (หากมี)
+    \item ทดสอบการเชื่อมต่อจาก Backend-Go ไปยัง Database
+\end{itemize}
+
+\subsection{การตั้งค่าโดเมนและ HTTPS}
+\begin{itemize}
+    \item ติดตั้ง Reverse Proxy ชั้นนอก (เช่น Nginx, Caddy หรือ Traefik) เพื่อรับ Traffic ที่พอร์ต 80/443
+    \item ตั้งค่า SSL Certificate ผ่าน Let’s Encrypt
+    \item ตรวจสอบ Google OAuth Redirect URI ให้ตรงกับ Domain ของ Production
+\end{itemize}
+
+\subsection{การเสริมความปลอดภัย (Hardening)}
+\begin{itemize}
+    \item \textbf{Secret Management:} ห้ามเก็บไฟล์ \texttt{.env} จริงไว้ในระบบ Version Control (Git)
+    \item \textbf{Backup:} ตั้งค่าการสำรองข้อมูล Docker Volume อย่างสม่ำเสมอ
+    \item \textbf{Log Rotation:} ตั้งค่าเพื่อป้องกันไม่ให้ Log กินพื้นที่ Disk จนเต็ม
+    \item \textbf{Access Control:} จำกัดสิทธิ์ VM User และใช้ SSH Key แทน Password
+\end{itemize}
+
+\subsection{เมื่อมีการอัปเดต Source Code หรือเวอร์ชันใหม่}
+\begin{verbatim}
+# 1. แก้ไขเลข Tag ใน docker-compose.yml
+# 2. ดึง Image ใหม่และ Restart เฉพาะจุด
+docker compose up -d --pull always
+\end{verbatim}
+
 \section{ปัญหาที่พบบ่อยและแนวทางแก้ไข}
 \begin{enumerate}
     \item \textbf{พอร์ตถูกใช้งานอยู่แล้ว} \\
