@@ -45,6 +45,321 @@
     \caption{การนำเสนอโครงการต่อคณะกรรมการในการสอบปลายภาคเรียนที่ 2 ปีการศึกษา 2568}
 \end{figure}
 
-\chapter{\ifenglish Manual\else คู่มือการใช้งานระบบ\fi}
+\chapter{\ifenglish Manual\else คู่มือการติดตั้งระบบ\fi}
 
-Manual goes here.
+\begin{mypara}
+    \indent ในภาคผนวกนี้จะเป็นคู่มือการติดตั้งระบบสำหรับผู้ที่สนใจนำระบบไปใช้งานต่อหรือพัฒนาต่อจากโครงงานนี้ โดยจะมีรายละเอียดเกี่ยวกับขั้นตอนการติดตั้งเบื้องต้นของระบบ โดยแบ่งเป็น 34 ส่วนประกอบหลักได้แก่
+    ส่วนติดต่อผู้ใช้ (Frontend Display) ส่วนบริการการคำนวณ (Logical Model) ส่วนบริการการจัดการ (Backend Controller) และระบบฐานข้อมูล (Database)  ซึ่งรายละเอียดการเตรียมสภาพแวดล้อมพื้นฐาน 
+    และการติดตั้งระบบทั้งหมดจะถูกอธิบายไว้ในส่วนนี้
+\end{mypara}
+
+\section{ภาพรวมของระบบ}
+\begin{mypara}
+    \indent ระบบ DeSS-T ประกอบด้วย 4 ส่วนหลัก ได้แก่
+\end{mypara}
+\begin{itemize}
+    \item ส่วนติดต่อผู้ใช้ (Frontend Display): React + Vite + TypeScript
+    \item ส่วนบริการการคำนวณ (Logical Model): Python
+    \item ส่วนบริการการจัดการ (Backend Controller): Go
+    \item ระบบฐานข้อมูล (Database): PostgreSQL พร้อมส่วนขยาย PostGIS
+\end{itemize}
+\begin{mypara}
+    \indent โครงสร้างโฟลเดอร์หลักของโครงการมีดังนี้
+\end{mypara}
+
+\begin{verbatim}
+DeSS_T/
+|- docker-compose.yml
+|- .env
+|- README.md
+|- DeSS_T_Frontend/
+|- DeSS_T_Backend-go/
+`- DeSS_T_Backend-python/
+\end{verbatim}
+
+\section{การเริ่มต้นโปรเจกต์}
+\begin{mypara}
+    \indent เริ่มต้นโดยโคลนซอร์สโค้ดจาก GitHub repository ของโครงการ และเข้าสู่โฟลเดอร์หลักของระบบ
+\end{mypara}
+
+\begin{verbatim}
+git clone https://github.com/PAWEENNUTpuyfai/DeSS_T.git
+cd DeSS_T
+\end{verbatim}
+
+\section{ซอฟต์แวร์ที่จำเป็นก่อนเริ่มใช้งาน}
+\begin{mypara}
+    \indent ในการติดตั้งและรันระบบบนระบบปฏิบัติการ Windows (PowerShell) จำเป็นต้องติดตั้งซอฟต์แวร์ดังต่อไปนี้
+\end{mypara}
+
+\begin{enumerate}
+    \item Git
+    \item Node.js รุ่น LTS (แนะนำเวอร์ชัน 20 ขึ้นไป)
+    \item npm
+    \item Go (แนะนำเวอร์ชัน 1.22 ขึ้นไป)
+    \item Python (แนะนำเวอร์ชัน 3.11 ขึ้นไป)
+    \item Docker Desktop และ Docker Compose
+    \item PostgreSQL 15+ พร้อม PostGIS extension
+\end{enumerate}
+
+สามารถตรวจสอบเวอร์ชันด้วยคำสั่ง
+\begin{verbatim}
+git --version
+node -v
+npm -v
+go version
+python --version
+docker --version
+\end{verbatim}
+
+\section{การกำหนดค่าตัวแปรแวดล้อม}
+\begin{mypara}
+    \indent ให้สร้างหรือแก้ไขไฟล์ \texttt{.env} ที่รากของโปรเจกต์ โดยกำหนดค่าอย่างน้อยดังนี้
+\end{mypara}
+
+\begin{verbatim}
+# ORS
+ORS_API_KEY=YOUR_ORS_API_KEY
+
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=DeSS_T
+DB_PASSWORD=CHANGE_ME
+DB_NAME=dess_db
+\end{verbatim}
+
+นอกจากนี้ ในโฟลเดอร์ Frontend ต้องมีไฟล์ \texttt{.env} (เช่น \texttt{DeSS\_T\_Frontend/.env}) และกำหนดค่าอย่างน้อยดังนี้
+\begin{verbatim}
+VITE_GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+\end{verbatim}
+
+หมายเหตุ: ตัวแปรที่ขึ้นต้นด้วย \texttt{VITE\_} เป็นรูปแบบที่ Vite ใช้สำหรับเปิดให้ฝั่ง Frontend เข้าถึงค่าจาก environment ได้
+
+ข้อควรระวังสำคัญมีดังนี้
+\begin{enumerate}
+    \item ไม่ควรบันทึกค่าความลับจริง (เช่น API key หรือรหัสผ่านจริง) ลงใน public repository
+    \item ควรเปลี่ยนรหัสผ่านเริ่มต้นก่อนนำไปใช้งานจริง
+\end{enumerate}
+
+\section{การตั้งค่า PostgreSQL และ PostGIS}
+\begin{mypara}
+    \indent เนื่องจากระบบต้องพึ่งพาความสามารถเชิงพื้นที่ (Spatial) จึงจำเป็นต้องเปิดใช้งาน PostGIS ในฐานข้อมูลก่อนเริ่มบริการ backend
+\end{mypara}
+
+\subsection{ทางเลือก A: ติดตั้ง PostgreSQL ภายในเครื่อง (Manual)}
+\begin{mypara}
+    \indent เชื่อมต่อ PostgreSQL ด้วยสิทธิ์ผู้ดูแลระบบ และรันคำสั่ง
+\end{mypara}
+\begin{verbatim}
+CREATE USER "DeSS_T" WITH PASSWORD 'CHANGE_ME';
+CREATE DATABASE dess_db OWNER "DeSS_T";
+\c dess_db
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS postgis_topology;
+\end{verbatim}
+
+ตรวจสอบการทำงานของ PostGIS
+\begin{verbatim}
+SELECT PostGIS_Version();
+\end{verbatim}
+
+\subsection{ทางเลือก B: ใช้ PostgreSQL + PostGIS ผ่าน Docker}
+\begin{mypara}
+    \indent สำหรับการทดสอบแบบรวดเร็ว สามารถสร้างคอนเทนเนอร์ด้วยคำสั่ง
+\end{mypara}
+
+\begin{verbatim}
+docker run --name dess-postgis -e POSTGRES_USER=DeSS_T -e 
+POSTGRES_PASSWORD=CHANGE_ME -e POSTGRES_DB=dess_db -p 5432:5432 -d 
+postgis/postgis:15-3.4
+\end{verbatim}
+
+และตรวจสอบเวอร์ชัน PostGIS
+\begin{verbatim}
+docker exec -it dess-postgis psql -U DeSS_T -d dess_db -c 
+"SELECT PostGIS_Version();"
+\end{verbatim}
+
+\section{การรันระบบด้วย Docker Compose (วิธีที่แนะนำ)}
+\begin{mypara}
+    \indent จากโฟลเดอร์รากของโปรเจกต์ ใช้คำสั่ง
+\end{mypara}
+
+\begin{verbatim}
+docker compose up -d --build
+\end{verbatim}
+
+ตรวจสอบบันทึกการทำงานของระบบ
+\begin{verbatim}
+docker compose logs -f
+\end{verbatim}
+
+หยุดการทำงานของบริการ
+\begin{verbatim}
+docker compose down
+\end{verbatim}
+
+\section{การรันระบบแบบไม่ใช้ Docker (Manual)}
+\begin{mypara}
+    \indent กรณีไม่ใช้ Docker ให้เปิดหลายหน้าต่างเทอร์มินัลและรันแต่ละบริการแยกกัน
+\end{mypara}
+
+\subsection{Frontend}
+\begin{verbatim}
+npm install --prefix .\DeSS_T_Frontend
+npm run --prefix .\DeSS_T_Frontend dev
+\end{verbatim}
+โดยทั่วไปจะเข้าถึงได้ที่ \texttt{http://localhost:5173}
+
+\subsection{Go Backend}
+\begin{verbatim}
+cd .\DeSS_T_Backend-go
+go mod tidy
+go run main.go
+\end{verbatim}
+
+\subsection{Python Backend}
+\begin{verbatim}
+cd .\DeSS_T_Backend-python
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+python -m app.main
+\end{verbatim}
+
+\section{คำสั่งสำหรับการ Build ระบบ}
+\subsection{Build Frontend สำหรับ Production}
+\begin{verbatim}
+npm run --prefix .\DeSS_T_Frontend build
+npm run --prefix .\DeSS_T_Frontend preview
+\end{verbatim}
+
+\subsection{Build Go Backend เป็นไฟล์ปฏิบัติการ}
+\begin{verbatim}
+cd .\DeSS_T_Backend-go
+go build -o .\bin\server.exe .
+\end{verbatim}
+
+\section{แนวทางตรวจสอบหลังติดตั้ง (Health Check)}
+หลังจากติดตั้งและเริ่มระบบแล้ว ควรตรวจสอบรายการต่อไปนี้
+\begin{enumerate}
+    \item PostgreSQL สามารถเชื่อมต่อได้ตาม host/port ที่กำหนด
+    \item คำสั่ง \texttt{SELECT PostGIS\_Version();} คืนค่าเวอร์ชันได้ถูกต้อง
+    \item Go backend เริ่มทำงานได้โดยไม่มีข้อผิดพลาดการเชื่อมต่อฐานข้อมูล
+    \item Python backend เริ่มทำงานได้โดยไม่มีปัญหา import หรือปัญหาฐานข้อมูล
+    \item Frontend สามารถเรียกใช้งาน API ของ backend ได้สำเร็จ
+\end{enumerate}
+
+\section{แนวทางการ deploy production บน VM}
+ก่อนเริ่มการติดตั้ง ให้ดำเนินการเตรียมสภาพแวดล้อมบน VM ดังนี้:
+\begin{itemize}
+    \item \textbf{ติดตั้งเครื่องมือหลัก:} ติดตั้ง Docker Engine และ Docker Compose plugin
+    \item \textbf{ตั้งค่า Firewall / Security Group:} เปิดพอร์ตที่จำเป็นสำหรับการสื่อสาร
+    \begin{itemize}
+        \item \texttt{80/443}: สำหรับ Reverse Proxy และการทำ SSL
+        \item \texttt{3000}: สำหรับการเข้าถึง Frontend โดยตรง (ถ้าจำเป็น)
+        \item \texttt{8080}: สำหรับ API Backend
+        \item \textit{หมายเหตุ:} ไม่ควรเปิดพอร์ต \texttt{5432} (PostgreSQL) เป็นสาธารณะ
+    \end{itemize}
+    \item \textbf{สร้างโฟลเดอร์โปรเจกต์:} เช่น \texttt{/opt/dess-t} สำหรับเก็บไฟล์ Config ทั้งหมด
+\end{itemize}
+
+\subsection{จัดวางไฟล์สำคัญในโฟลเดอร์โปรเจกต์ที่สร้างขึ้น}
+\begin{enumerate}
+    \item \texttt{docker-compose.yml}
+    \item \texttt{nginx.conf} (สำหรับการทำ mount เข้าไปยัง Frontend container)
+    \item \texttt{.env} สำหรับสภาวะ Production โดยต้องระบุค่าที่สำคัญ ดังนี้:
+\end{enumerate}
+
+\begin{verbatim}
+ORS_API_KEY=your_key_here
+GOOGLE_CLIENT_ID=your_id_here
+GOOGLE_CLIENT_SECRET=your_secret_here
+GOOGLE_REDIRECT_URI=https://<your-domain>/auth/callback
+DB_USER=admin
+DB_PASSWORD=your_secure_password
+DB_NAME=dess_t_db
+\end{verbatim}
+
+\subsection{เพื่อให้ระบบมีความปลอดภัยและเสถียร}
+ควรปรับแก้ไฟล์ \texttt{docker-compose.yml} ดังนี้:
+\begin{itemize}
+    \item \textbf{Restart Policy:} ใส่ \texttt{restart: unless-stopped} ให้กับทุก Service
+    \item \textbf{Port Binding:} 
+    \begin{itemize}
+        \item นำพอร์ต \texttt{5432:5432} ออก หรือ Bind เฉพาะ \texttt{127.0.0.1}
+        \item พิจารณานำพอร์ต \texttt{5000} และ \texttt{8080} ออกหากต้องการให้ผ่าน Nginx เพียงทางเดียว
+    \end{itemize}
+    \item \textbf{Image Tagging:} ใช้ Tag แบบระบุเวอร์ชันที่แน่นอน (Immutable tags) เช่น \texttt{8.1} หรือ \texttt{8.4} แทนการใช้ \texttt{latest}
+\end{itemize}
+
+\subsection{ดำเนินการดึง Image และเริ่มการทำงานด้วยคำสั่ง}
+\begin{verbatim}
+# เริ่มทำงานในโหมด Background
+docker compose up -d
+
+# ตรวจสอบสถานะและ Healthcheck
+docker compose ps
+
+# ดู Log เพื่อตรวจสอบความผิดปกติ
+docker compose logs -f
+\end{verbatim}
+
+\subsection{การจัดการฐานข้อมูลครั้งแรก}
+\begin{itemize}
+    \item ตรวจสอบจนมั่นใจว่า PostgreSQL อยู่ในสถานะ \texttt{healthy}
+    \item รันกระบวนการ Migration หรือ Seed ข้อมูล (หากมี)
+    \item ทดสอบการเชื่อมต่อจาก Backend-Go ไปยัง Database
+\end{itemize}
+
+\subsection{การตั้งค่าโดเมนและ HTTPS}
+\begin{itemize}
+    \item ติดตั้ง Reverse Proxy ชั้นนอก (เช่น Nginx, Caddy หรือ Traefik) เพื่อรับ Traffic ที่พอร์ต 80/443
+    \item ตั้งค่า SSL Certificate ผ่าน Let’s Encrypt
+    \item ตรวจสอบ Google OAuth Redirect URI ให้ตรงกับ Domain ของ Production
+\end{itemize}
+
+\subsection{การเสริมความปลอดภัย (Hardening)}
+\begin{itemize}
+    \item \textbf{Secret Management:} ห้ามเก็บไฟล์ \texttt{.env} จริงไว้ในระบบ Version Control (Git)
+    \item \textbf{Backup:} ตั้งค่าการสำรองข้อมูล Docker Volume อย่างสม่ำเสมอ
+    \item \textbf{Log Rotation:} ตั้งค่าเพื่อป้องกันไม่ให้ Log กินพื้นที่ Disk จนเต็ม
+    \item \textbf{Access Control:} จำกัดสิทธิ์ VM User และใช้ SSH Key แทน Password
+\end{itemize}
+
+\subsection{เมื่อมีการอัปเดต Source Code หรือเวอร์ชันใหม่}
+\begin{verbatim}
+# 1. แก้ไขเลข Tag ใน docker-compose.yml
+# 2. ดึง Image ใหม่และ Restart เฉพาะจุด
+docker compose up -d --pull always
+\end{verbatim}
+
+\section{ปัญหาที่พบบ่อยและแนวทางแก้ไข}
+\begin{enumerate}
+    \item \textbf{พอร์ตถูกใช้งานอยู่แล้ว} \\
+    เปลี่ยนพอร์ตของบริการ หรือหยุดโปรเซสที่ใช้พอร์ตเดิม
+
+    \item \textbf{ยืนยันตัวตนฐานข้อมูลไม่ผ่าน} \\
+    ตรวจสอบค่า \texttt{DB\_USER}, \texttt{DB\_PASSWORD}, \texttt{DB\_NAME} และสิทธิ์ของผู้ใช้ฐานข้อมูล
+
+    \item \textbf{ไม่พบฟังก์ชันของ PostGIS} \\
+    ตรวจสอบว่าได้รัน \texttt{CREATE EXTENSION postgis;} ในฐานข้อมูลที่ถูกต้อง
+
+    \item \textbf{เกิดปัญหา dependency ฝั่ง Frontend} \\
+    ลบและติดตั้งแพ็กเกจใหม่
+\begin{verbatim}
+Remove-Item -Recurse -Force .\DeSS_T_Frontend\node_modules
+npm install --prefix .\DeSS_T_Frontend
+\end{verbatim}
+
+    \item \textbf{เกิดปัญหาแพ็กเกจฝั่ง Python} \\
+    ตรวจสอบว่าได้ activate virtual environment ก่อนติดตั้งแพ็กเกจและรันแอปพลิเคชัน
+\end{enumerate}
+
+\section{ข้อพิจารณาด้านความปลอดภัย}
+\begin{enumerate}
+    \item ควรเปลี่ยน (rotate) API key และรหัสผ่านฐานข้อมูลอย่างสม่ำเสมอ
+    \item ควรป้องกันไฟล์ \texttt{.env} ไม่ให้รั่วไหลสู่ระบบควบคุมเวอร์ชันในสภาพแวดล้อมที่มีข้อมูลสำคัญ
+    \item ควรแยกชุดข้อมูลรับรอง (credentials) สำหรับ dev, staging และ production ออกจากกันอย่างชัดเจน
+\end{enumerate}
