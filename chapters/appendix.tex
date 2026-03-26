@@ -270,18 +270,15 @@ go build -o .\bin\server.exe .
     \item \texttt{docker-compose.yml}
     \item \texttt{nginx.conf} (สำหรับการทำ mount เข้าไปยัง Frontend container)
     \item \texttt{.env} สำหรับสภาวะ Production โดยต้องระบุค่าที่สำคัญ ดังนี้:
-\end{enumerate}
 
 \begin{verbatim}
 ORS_API_KEY=your_key_here
-GOOGLE_CLIENT_ID=your_id_here
-GOOGLE_CLIENT_SECRET=your_secret_here
-GOOGLE_REDIRECT_URI=https://<your-domain>/auth/callback
 DB_USER=admin
 DB_PASSWORD=your_secure_password
 DB_NAME=dess_t_db
 \end{verbatim}
-
+    \item ส่วน .env ที่ใช้สำหรับการตั้งค่า Google OAuth จำเป็นต้อง build พร้อม Image ของ Frontend ใหม่ทุกครั้งที่มีการเปลี่ยนแปลงค่าในไฟล์นี้ เนื่องจาก Vite จะทำการฝังค่าจาก environment ลงในโค้ดของ Frontend ในระหว่างขั้นตอนการ build เท่านั้น
+\end{enumerate}
 \subsection{เพื่อให้ระบบมีความปลอดภัยและเสถียร}
 ควรปรับแก้ไฟล์ \texttt{docker-compose.yml} ดังนี้:
 \begin{itemize}
